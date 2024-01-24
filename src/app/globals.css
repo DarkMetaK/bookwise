@@ -10,3 +10,8 @@ body {
 body, input, textarea, button {
   font-family: var(--font-nunito);
 }
+
+img {
+  max-width: 100%;
+  display: block;
+}
