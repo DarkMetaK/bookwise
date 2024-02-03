@@ -15,3 +15,14 @@ img {
   max-width: 100%;
   display: block;
 }
+
+.active-link::before {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 4px;
+    height: 24px;
+    background: linear-gradient(180deg, #7FD1CC 0%, #9694F5 100%);
+    left: -16px;
+    border-radius: 999px;
+}

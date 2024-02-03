@@ -1,20 +1,43 @@
 import { getServerSession } from 'next-auth'
+import Image from 'next/image'
 import { redirect } from 'next/navigation'
 
-import { authOptions } from '@/lib/auth'
+import heroImage from '@/assets/Hero.svg'
+import { authOptions } from '@/libs/authOptions'
 
-export default async function Home() {
-  const session = await getServerSession(authOptions)
-  const user = session?.user
+import { AuthOptions } from '@/components/AuthOptions'
 
-  if (!user) {
-    redirect('/login')
+export default async function Login() {
+  const isAuthenticated = await getServerSession(authOptions)
+
+  if (isAuthenticated) {
+    redirect('/home')
   }
 
   return (
-    <div>
-      <h1>Bem vindo</h1>
-      <p>{user.name}</p>
-    </div>
+    <main className="p-5 flex items-center justify-center">
+      <div className="w-[37.5rem] h-[57rem] overflow-hidden rounded-[10px]">
+        <Image
+          src={heroImage}
+          alt="Imagem de uma mulher loira deitada no sofá com quatro almofadas, enquanto se concentra na leitura de um livro. A imagem está sobreposta por uma camada com cores azuladas, e no centro da foto em destaque, encontra-se a logo da plataforma BookWise"
+          className="object-cover"
+          quality={60}
+          priority
+        />
+      </div>
+
+      <article className="flex flex-col gap-10 max-w-96 mx-auto">
+        <div>
+          <h1 className="text-2xl leading-snug text-gray-100 font-bold mb-[2px]">
+            Boas vindas!
+          </h1>
+          <p className="text-gray-200 leading-relaxed">
+            Faça seu login ou acesse como visitante.
+          </p>
+        </div>
+
+        <AuthOptions includesVisitorOption />
+      </article>
+    </main>
   )
 }
