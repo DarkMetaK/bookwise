@@ -35,6 +35,9 @@ const config: Config = {
         'gradient-horizontal': `linear-gradient(90deg, #7FD1CC 0%, #9694F5 100%)`,
       },
     },
+    backgroundImage: {
+      sidebar: 'url("/SidebarBg.svg")',
+    },
   },
   plugins: [],
 }
