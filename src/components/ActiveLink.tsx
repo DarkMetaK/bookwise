@@ -16,7 +16,7 @@ export function ActiveLink({ children, ...rest }: IActiveLinkProps) {
   return (
     <Link
       {...rest}
-      className={`leading-relaxed flex items-center gap-3 py-2 transition-colors hover:text-gray-100 ${isActive ? 'text-gray-100 font-bold active-link relative' : 'text-gray-400 font-normal'}`}
+      className={`flex items-center gap-3 py-2 leading-relaxed transition-colors hover:text-gray-100 ${isActive ? 'active-link relative font-bold text-gray-100' : 'font-normal text-gray-400'}`}
     >
       {children}
     </Link>

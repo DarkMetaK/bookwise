@@ -1,9 +1,9 @@
 'use client'
 
+import { ButtonHTMLAttributes } from 'react'
+import Image from 'next/image'
 import { useSession, signOut } from 'next-auth/react'
 import { SignIn, SignOut } from '@phosphor-icons/react'
-import Image from 'next/image'
-import { ButtonHTMLAttributes } from 'react'
 
 export function LogoutButton(props: ButtonHTMLAttributes<HTMLButtonElement>) {
   const { status, data } = useSession()
@@ -13,7 +13,7 @@ export function LogoutButton(props: ButtonHTMLAttributes<HTMLButtonElement>) {
     return (
       <button
         {...props}
-        className="mt-auto text-gray-200 font-bold leading-relaxed flex items-center gap-3 py-2 transition-colors hover:text-gray-100"
+        className="mt-auto flex w-full max-w-36 items-center justify-center gap-3 py-2 font-bold leading-relaxed text-gray-200 transition-colors hover:text-gray-100"
       >
         Fazer login <SignIn size={20} className="text-blue-100" />
       </button>
@@ -24,17 +24,20 @@ export function LogoutButton(props: ButtonHTMLAttributes<HTMLButtonElement>) {
     <button
       {...props}
       onClick={async () => await signOut()}
-      className="mt-auto text-gray-200 font-normal leading-relaxed flex items-center gap-3 py-2 transition-colors group"
+      className="group mt-auto flex w-full max-w-36 items-center gap-3 py-2 font-normal leading-relaxed text-gray-200 transition-colors"
     >
       <Image
         src={data?.user?.image as string}
         alt=""
         width={32}
         height={32}
-        className="object-cover rounded-full border border-blue-100"
+        className="aspect-square rounded-full border border-blue-100 object-cover"
       />
-      {data?.user?.name}
-      <SignOut size={20} className="text-red-500 group-hover:text-red-300" />
+      <span className="flex-1 truncate">{data?.user?.name}</span>
+      <SignOut
+        size={20}
+        className="min-w-5 text-red-500 group-hover:text-red-300"
+      />
     </button>
   )
 }
