@@ -1,11 +1,12 @@
 'use client'
-
+import { useState } from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 
-import googleLogo from '@/assets/Google.svg'
-import githubLogo from '@/assets/Github.svg'
-import rocketLogo from '@/assets/RocketLaunch.svg'
+import googleLogo from '@/assets/google.svg'
+import githubLogo from '@/assets/github.svg'
+import rocketLogo from '@/assets/rocket.svg'
 
 interface IAuthOptionsProps {
   includesVisitorOption?: boolean
@@ -14,12 +15,28 @@ interface IAuthOptionsProps {
 export function AuthOptions({
   includesVisitorOption = false,
 }: IAuthOptionsProps) {
+  const [authenticationInProgress, setAuthenticationInProgress] =
+    useState(false)
+  const router = useRouter()
+
+  async function handleAuthentication(provider: string) {
+    setAuthenticationInProgress(true)
+
+    if (provider === 'visitor') {
+      router.push('/home')
+      return
+    }
+
+    await signIn(provider)
+  }
+
   return (
     <ul className="flex flex-col gap-4">
       <li>
         <button
-          className="w-full px-6 py-5 rounded-lg bg-gray-600 text-lg leading-relaxed text-gray-200 font-bold flex items-center gap-5 cursor-pointer transition-colors hover:bg-gray-700"
-          onClick={async () => await signIn('google')}
+          className="flex w-full cursor-pointer items-center gap-5 rounded-lg bg-gray-600 px-6 py-5 text-lg font-bold leading-relaxed text-gray-200 transition-colors disabled:cursor-not-allowed disabled:opacity-60 [&:not(:disabled)]:hover:bg-gray-700"
+          onClick={() => handleAuthentication('google')}
+          disabled={authenticationInProgress}
         >
           <Image src={googleLogo} alt="logo da Googl" width={32} height={32} />
           Entrar com Google
@@ -27,8 +44,9 @@ export function AuthOptions({
       </li>
       <li>
         <button
-          className="w-full px-6 py-5 rounded-lg bg-gray-600 text-lg leading-relaxed text-gray-200 font-bold flex items-center gap-5 cursor-pointer transition-colors hover:bg-gray-700"
-          onClick={async () => await signIn('github')}
+          className="flex w-full cursor-pointer items-center gap-5 rounded-lg bg-gray-600 px-6 py-5 text-lg font-bold leading-relaxed text-gray-200 transition-colors disabled:cursor-not-allowed disabled:opacity-60 [&:not(:disabled)]:hover:bg-gray-700"
+          onClick={() => handleAuthentication('github')}
+          disabled={authenticationInProgress}
         >
           <Image src={githubLogo} alt="logo do GitHub" width={32} height={32} />
           Entrar com GitHub
@@ -36,7 +54,11 @@ export function AuthOptions({
       </li>
       {includesVisitorOption && (
         <li>
-          <button className="w-full px-6 py-5 rounded-lg bg-gray-600 text-lg leading-relaxed text-gray-200 font-bold flex items-center gap-5 cursor-pointer transition-colors hover:bg-gray-700">
+          <button
+            className="flex w-full cursor-pointer items-center gap-5 rounded-lg bg-gray-600 px-6 py-5 text-lg font-bold leading-relaxed text-gray-200 transition-colors disabled:cursor-not-allowed disabled:opacity-60 [&:not(:disabled)]:hover:bg-gray-700"
+            onClick={() => handleAuthentication('visitor')}
+            disabled={authenticationInProgress}
+          >
             <Image
               src={rocketLogo}
               alt="Ícone de um foguete roxo decolando"

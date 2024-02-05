@@ -36,7 +36,7 @@ const config: Config = {
       },
     },
     backgroundImage: {
-      sidebar: 'url("/SidebarBg.svg")',
+      sidebar: 'url("/sidebar-bg.png")',
     },
   },
   plugins: [],

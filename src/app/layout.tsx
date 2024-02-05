@@ -28,7 +28,7 @@ export default async function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`${nunito.variable} font-normal bg-gray-800 text-gray-100`}
+        className={`${nunito.variable} bg-gray-800 font-normal text-gray-100`}
       >
         <SessionContext session={session}>{children}</SessionContext>
       </body>
