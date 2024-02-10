@@ -45,16 +45,16 @@ export default async function Home() {
   })
 
   return (
-    <main className="mr-24 h-[calc(100vh-2.5rem)] flex-1 overflow-hidden pt-12">
-      <header className="mb-10 flex items-center gap-3">
+    <main className="mr-24 h-[calc(100vh-2.5rem)] flex-1 overflow-hidden pt-12 max-xl:mr-12 max-md:mr-0 max-md:pt-[5.25rem]">
+      <header className="mb-10 flex items-center gap-3 max-md:mb-5">
         <ChartLineUp size={32} className="text-blue-100" />
         <h1 className="text-2xl font-bold leading-snug text-gray-100">
           Início
         </h1>
       </header>
 
-      <div className="grid h-[calc(100%-4.5rem)] grid-cols-[minmax(30rem,_1fr)_20rem] gap-16">
-        <section className="overflow-y-scroll pr-5">
+      <div className="grid h-[calc(100%-4.5rem)] grid-cols-[minmax(30rem,_1fr)_minmax(auto,20rem)] gap-16 max-xl:grid-cols-1">
+        <section className="overflow-y-scroll pr-5 max-md:pr-0">
           <h2 className="pb-4 text-sm leading-relaxed text-gray-100">
             Avaliações mais recentes
           </h2>
@@ -70,8 +70,8 @@ export default async function Home() {
           </ul>
         </section>
 
-        <section className="overflow-hidden">
-          <header className="flex items-baseline justify-between">
+        <section className="overflow-hidden max-xl:hidden">
+          <header className="flex flex-wrap items-baseline justify-between">
             <h2 className="pb-4 text-sm leading-relaxed text-gray-100">
               Livros populares
             </h2>

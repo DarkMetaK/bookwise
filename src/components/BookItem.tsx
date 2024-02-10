@@ -21,14 +21,14 @@ export function BookItem({ imageSize = 'md', ...props }: IBookItemProps) {
   )
 
   return (
-    <div className="flex gap-5 rounded-lg bg-gray-700 px-5 py-4">
+    <div className="flex w-full gap-5 rounded-lg bg-gray-700 px-5 py-4">
       <div
-        className={`w-full ${imageSize === 'md' ? 'max-w-[6.75rem]' : 'max-w-[4rem]'} overflow-hidden rounded-[4px]`}
+        className={` ${imageSize === 'md' ? 'max-w-[6.75rem]' : 'max-w-[4rem]'} flex-1 overflow-hidden rounded-[4px]`}
       >
         <Image src={`/${props.cover_url}`} alt="" width={108} height={152} />
       </div>
 
-      <div className="flex flex-col justify-between overflow-hidden">
+      <div className="flex flex-1 flex-col justify-between overflow-hidden">
         <div className="flex flex-col">
           <strong className="truncate leading-snug text-gray-100">
             {props.name}
