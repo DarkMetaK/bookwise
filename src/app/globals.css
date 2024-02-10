@@ -27,6 +27,12 @@ img {
     border-radius: 999px;
 }
 
+@media (max-width: 860px) {
+  .active-link::before {
+    display: none;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 2px;
 }

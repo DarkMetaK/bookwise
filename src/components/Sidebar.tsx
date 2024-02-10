@@ -12,7 +12,7 @@ export async function Sidebar() {
   const isAuthenticated = await getServerSession(authOptions)
 
   return (
-    <aside className="flex h-[calc(100vh-2.5rem)] min-w-60 flex-col gap-16 rounded-xl bg-sidebar bg-center bg-no-repeat px-12 pb-6 pt-10">
+    <aside className="flex h-[calc(100vh-2.5rem)] min-w-60 flex-col gap-16 rounded-xl bg-sidebar bg-center bg-no-repeat px-12 pb-6 pt-10 max-md:hidden">
       <div className="mx-auto max-h-8 max-w-32">
         <Image src={Logo} alt="Logo da Bookwise" />
       </div>

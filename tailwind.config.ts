@@ -34,6 +34,9 @@ const config: Config = {
         'gradient-vertical': `linear-gradient(180deg, #7FD1CC 0%, #9694F5 100%)`,
         'gradient-horizontal': `linear-gradient(90deg, #7FD1CC 0%, #9694F5 100%)`,
       },
+      screens: {
+        md: '860px',
+      },
     },
     backgroundImage: {
       sidebar: 'url("/sidebar-bg.png")',
