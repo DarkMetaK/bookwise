@@ -2,11 +2,11 @@ import Image from 'next/image'
 import { getServerSession } from 'next-auth'
 import { SignIn } from '@phosphor-icons/react/dist/ssr'
 
-import { authOptions } from '@/libs/authOptions'
+import { authOptions } from '@/libs/auth-options'
 import Logo from '@/assets/logo.svg'
 
-import { ActiveLink } from '@/components/ActiveLink'
-import { DropdownMenu } from '@/components/DropdownMenu'
+import { NavLink } from '@/components/nav-link'
+import { DropdownMenu } from '@/components/dropdown-menu'
 
 export async function Header() {
   const isAuthenticated = await getServerSession(authOptions)
@@ -19,10 +19,10 @@ export async function Header() {
 
       <nav className="flex items-center gap-10">
         {!isAuthenticated && (
-          <ActiveLink href="/login">
+          <NavLink href="/login">
             <SignIn size={24} />
             Login
-          </ActiveLink>
+          </NavLink>
         )}
 
         <DropdownMenu isAuthenticated={!!isAuthenticated} />

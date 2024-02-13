@@ -3,8 +3,8 @@
 import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu'
 import { List, ChartLineUp, Binoculars, User } from '@phosphor-icons/react'
 
-import { ActiveLink } from '@/components/ActiveLink'
-import { LogoutButton } from './LogoutButton'
+import { NavLink } from '@/components/nav-link'
+import { LogoutButton } from './logout-button'
 
 export function DropdownMenu({
   isAuthenticated,
@@ -27,25 +27,25 @@ export function DropdownMenu({
           className="w-60 space-y-2 rounded-md bg-gray-700 p-6 shadow-lg"
         >
           <RadixDropdownMenu.Item>
-            <ActiveLink href="/home" onClick={handleCloseDropdown}>
+            <NavLink href="/home" onClick={handleCloseDropdown}>
               <ChartLineUp size={24} />
               Início
-            </ActiveLink>
+            </NavLink>
           </RadixDropdownMenu.Item>
 
           <RadixDropdownMenu.Item>
-            <ActiveLink href="/discover" onClick={handleCloseDropdown}>
+            <NavLink href="/discover" onClick={handleCloseDropdown}>
               <Binoculars size={24} /> Explorar
-            </ActiveLink>
+            </NavLink>
           </RadixDropdownMenu.Item>
 
           {isAuthenticated && (
             <>
               <RadixDropdownMenu.Item>
-                <ActiveLink href="/profile" onClick={handleCloseDropdown}>
+                <NavLink href="/profile" onClick={handleCloseDropdown}>
                   <User size={24} />
                   Perfil
-                </ActiveLink>
+                </NavLink>
               </RadixDropdownMenu.Item>
 
               <RadixDropdownMenu.Separator className="h-[1px] bg-gray-500" />

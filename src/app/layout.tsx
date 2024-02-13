@@ -2,10 +2,10 @@ import type { Metadata } from 'next'
 import { Nunito } from 'next/font/google'
 import { getServerSession } from 'next-auth/next'
 
-import { authOptions } from '@/libs/authOptions'
-import { SessionContext } from '@/contexts/SessionContext'
+import { authOptions } from '@/libs/auth-options'
+import { SessionContext } from '@/contexts/session-context'
 
-import './globals.css'
+import '@/app/globals.css'
 
 const nunito = Nunito({
   subsets: ['latin'],

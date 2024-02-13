@@ -12,7 +12,7 @@ interface IAuthOptionsProps {
   includesVisitorOption?: boolean
 }
 
-export function AuthOptions({
+export function LoginProviders({
   includesVisitorOption = false,
 }: IAuthOptionsProps) {
   const [authenticationInProgress, setAuthenticationInProgress] =
