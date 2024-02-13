@@ -2,11 +2,11 @@ import Image from 'next/image'
 import { getServerSession } from 'next-auth'
 import { ChartLineUp, Binoculars, User } from '@phosphor-icons/react/dist/ssr'
 
-import { authOptions } from '@/libs/authOptions'
+import { authOptions } from '@/libs/auth-options'
 import Logo from '@/assets/logo.svg'
 
-import { ActiveLink } from '@/components/ActiveLink'
-import { LogoutButton } from '@/components/LogoutButton'
+import { NavLink } from '@/components/nav-link'
+import { LogoutButton } from '@/components/logout-button'
 
 export async function Sidebar() {
   const isAuthenticated = await getServerSession(authOptions)
@@ -18,19 +18,19 @@ export async function Sidebar() {
       </div>
 
       <nav className="mx-auto flex max-w-fit flex-col gap-4">
-        <ActiveLink href="/home">
+        <NavLink href="/home">
           <ChartLineUp size={24} />
           Início
-        </ActiveLink>
-        <ActiveLink href="/discover">
+        </NavLink>
+        <NavLink href="/discover">
           <Binoculars size={24} /> Explorar
-        </ActiveLink>
+        </NavLink>
 
         {isAuthenticated && (
-          <ActiveLink href="/profile">
+          <NavLink href="/profile">
             <User size={24} />
             Perfil
-          </ActiveLink>
+          </NavLink>
         )}
       </nav>
 

@@ -3,8 +3,8 @@ import { ChartLineUp, CaretRight } from '@phosphor-icons/react/dist/ssr'
 
 import { prisma } from '@/libs/prisma'
 
-import { ReviewItem } from '@/components/ReviewItem'
-import { BookItem } from '@/components/BookItem'
+import { ReviewItem } from '@/components/review-item'
+import { BookItem } from '@/components/book-item'
 
 export default async function Home() {
   const reviews = await prisma.rating.findMany({

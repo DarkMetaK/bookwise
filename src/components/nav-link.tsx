@@ -3,12 +3,12 @@
 import { usePathname } from 'next/navigation'
 import Link, { LinkProps } from 'next/link'
 
-interface IActiveLinkProps extends LinkProps {
+interface INavLinkProps extends LinkProps {
   children: React.ReactNode
   className?: string
 }
 
-export function ActiveLink({ children, className, ...rest }: IActiveLinkProps) {
+export function NavLink({ children, className, ...rest }: INavLinkProps) {
   const pathName = usePathname()
   const { href } = rest
 
