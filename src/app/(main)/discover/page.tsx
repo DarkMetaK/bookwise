@@ -1,11 +1,69 @@
-import { Binoculars } from '@phosphor-icons/react/dist/ssr'
+'use client'
+
+import { useState, useEffect } from 'react'
+import { Binoculars } from '@phosphor-icons/react'
 
 import { SearchInput } from '@/components/search-input'
+import { Tag } from './components/tag'
+
+interface IBookProps {
+  id: string
+  name: string
+  author: string
+  cover_url: string
+  ratings: {
+    rate: number
+  }[]
+  categories: {
+    book_id: string
+    categoryId: string
+  }[]
+}
+
+interface ICategoriesProps {
+  id: string
+  name: string
+}
 
 export default function Discover() {
+  const [books, setBooks] = useState<IBookProps[]>([])
+  const [categories, setCategories] = useState<ICategoriesProps[]>([])
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchBooks() {
+      try {
+        const response = await fetch(
+          `api/books${selectedCategory ? `?category=${selectedCategory}` : ''}`,
+        )
+        const json = await response.json()
+        setBooks(json)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchBooks()
+  }, [selectedCategory])
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const response = await fetch('api/categories')
+        const json = await response.json()
+        setCategories(json)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchCategories()
+  }, [])
+
   async function handleSearchBookOrAuthor(text: string) {
-    'use server'
     console.log(text)
+  }
+
+  function handleChangeActiveCategory(value: string | null) {
+    setSelectedCategory(value)
   }
 
   return (
@@ -25,6 +83,28 @@ export default function Discover() {
           />
         </div>
       </header>
+
+      <section>
+        <div className="flex flex-wrap items-center justify-start gap-3">
+          <Tag
+            selected={!selectedCategory}
+            onClick={() => handleChangeActiveCategory(null)}
+          >
+            Tudo
+          </Tag>
+          {categories.map((category) => (
+            <Tag
+              key={category.id}
+              selected={selectedCategory === category.id}
+              onClick={() => handleChangeActiveCategory(category.id)}
+            >
+              {category.name}
+            </Tag>
+          ))}
+        </div>
+
+        {JSON.stringify(books, null, 2)}
+      </section>
     </main>
   )
 }
