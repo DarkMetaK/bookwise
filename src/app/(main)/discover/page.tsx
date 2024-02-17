@@ -5,6 +5,8 @@ import { Binoculars } from '@phosphor-icons/react'
 
 import { SearchInput } from '@/components/search-input'
 import { Tag } from './components/tag'
+import { Skeleton } from '@/components/skeleton'
+import { BookItem } from '@/components/book-item'
 
 interface IBookProps {
   id: string
@@ -29,6 +31,8 @@ export default function Discover() {
   const [books, setBooks] = useState<IBookProps[]>([])
   const [categories, setCategories] = useState<ICategoriesProps[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [categoriesIsLoading, setCategoriesIsLoading] = useState(true)
+  const [booksIsLoading, setBooksIsLoading] = useState(true)
 
   useEffect(() => {
     async function fetchBooks() {
@@ -40,6 +44,8 @@ export default function Discover() {
         setBooks(json)
       } catch (error) {
         console.error(error)
+      } finally {
+        setBooksIsLoading(false)
       }
     }
     fetchBooks()
@@ -53,6 +59,8 @@ export default function Discover() {
         setCategories(json)
       } catch (error) {
         console.error(error)
+      } finally {
+        setCategoriesIsLoading(false)
       }
     }
     fetchCategories()
@@ -84,26 +92,38 @@ export default function Discover() {
         </div>
       </header>
 
-      <section>
-        <div className="flex flex-wrap items-center justify-start gap-3">
-          <Tag
-            selected={!selectedCategory}
-            onClick={() => handleChangeActiveCategory(null)}
-          >
-            Tudo
-          </Tag>
-          {categories.map((category) => (
-            <Tag
-              key={category.id}
-              selected={selectedCategory === category.id}
-              onClick={() => handleChangeActiveCategory(category.id)}
-            >
-              {category.name}
-            </Tag>
-          ))}
+      <section className="h-[calc(100%-5.5rem)]">
+        <div className="mb-12 flex flex-wrap items-center justify-start gap-3">
+          {categoriesIsLoading ? (
+            <Skeleton amount={10} className="h-8 w-24" />
+          ) : (
+            <>
+              <Tag
+                selected={!selectedCategory}
+                onClick={() => handleChangeActiveCategory(null)}
+              >
+                Tudo
+              </Tag>
+              {categories.map((category) => (
+                <Tag
+                  key={category.id}
+                  selected={selectedCategory === category.id}
+                  onClick={() => handleChangeActiveCategory(category.id)}
+                >
+                  {category.name}
+                </Tag>
+              ))}
+            </>
+          )}
         </div>
 
-        {JSON.stringify(books, null, 2)}
+        <div className=" grid h-[calc(100%-8.25rem)] grid-cols-3 items-start gap-5 overflow-y-scroll pr-5 max-md:pr-0">
+          {booksIsLoading ? (
+            <Skeleton amount={9} className="h-40 min-w-full rounded-lg" />
+          ) : (
+            books.map((book) => <BookItem key={book.id} {...book} />)
+          )}
+        </div>
       </section>
     </main>
   )
