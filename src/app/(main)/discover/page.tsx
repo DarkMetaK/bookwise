@@ -7,6 +7,7 @@ import { SearchInput } from '@/components/search-input'
 import { Tag } from './components/tag'
 import { Skeleton } from '@/components/skeleton'
 import { BookItem } from '@/components/book-item'
+import { Spinner } from '@/components/spinner'
 
 interface IBookProps {
   id: string
@@ -95,7 +96,7 @@ export default function Discover() {
       <section className="h-[calc(100%-5.5rem)]">
         <div className="mb-12 flex flex-wrap items-center justify-start gap-3">
           {categoriesIsLoading ? (
-            <Skeleton amount={10} className="h-8 w-24" />
+            <Skeleton amount={10} className="h-8 max-w-24" />
           ) : (
             <>
               <Tag
@@ -117,7 +118,7 @@ export default function Discover() {
           )}
         </div>
 
-        <div className=" grid h-[calc(100%-8.25rem)] grid-cols-3 items-start gap-5 overflow-y-scroll pr-5 max-md:pr-0">
+        <div className=" grid h-[calc(100%-8.25rem)] grid-cols-3 items-start gap-5 overflow-y-scroll pr-5 max-lg:grid-cols-2 max-md:pr-0 max-sm:grid-cols-1">
           {booksIsLoading ? (
             <Skeleton amount={9} className="h-40 min-w-full rounded-lg" />
           ) : (
