@@ -2,31 +2,14 @@ import Link from 'next/link'
 import { ChartLineUp, CaretRight } from '@phosphor-icons/react/dist/ssr'
 
 import { prisma } from '@/libs/prisma'
+import { getReviews } from '@/utils/getReviews'
 
-import { ReviewItem } from '@/components/review-item'
 import { BookItem } from '@/components/book-item'
+import { InfiniteScroll } from '@/components/infinite-scroll'
 
 export default async function Home() {
-  const reviews = await prisma.rating.findMany({
-    take: 5,
-    include: {
-      user: {
-        select: {
-          id: true,
-          image: true,
-          name: true,
-        },
-      },
-      book: {
-        select: {
-          id: true,
-          name: true,
-          cover_url: true,
-          author: true,
-        },
-      },
-    },
-  })
+  const totalReviews = await prisma.rating.count()
+  const reviews = await getReviews()
 
   const trendingBooks = await prisma.book.findMany({
     take: 3,
@@ -54,19 +37,12 @@ export default async function Home() {
       </header>
 
       <div className="grid h-[calc(100%-4.5rem)] grid-cols-[minmax(30rem,_1fr)_minmax(auto,20rem)] gap-16 max-xl:grid-cols-1">
-        <section className="overflow-y-scroll pr-5 max-md:pr-0">
+        <section className="overflow-y-scroll pr-5 max-md:overflow-y-hidden max-md:pr-0">
           <h2 className="pb-4 text-sm leading-relaxed text-gray-100">
             Avaliações mais recentes
           </h2>
           <ul className="flex flex-col gap-3">
-            {reviews.map((review) => (
-              <li key={review.id}>
-                <ReviewItem
-                  {...review}
-                  created_at={String(review.created_at)}
-                />
-              </li>
-            ))}
+            <InfiniteScroll totalItems={totalReviews} initialItems={reviews} />
           </ul>
         </section>
 
