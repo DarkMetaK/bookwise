@@ -7,6 +7,8 @@ import { getReviews } from '@/utils/getReviews'
 
 import { ReviewItem } from '@/components/review-item'
 import { FadeLoader } from 'react-spinners'
+import { getBooks } from '@/utils/getBooks'
+import { BookItem } from './book-item'
 
 interface IReviewItemProps {
   id: string
@@ -28,22 +30,45 @@ interface IReviewItemProps {
   }
 }
 
+interface IBookProps {
+  id: string
+  name: string
+  author: string
+  cover_url: string
+  ratings: {
+    rate: number
+  }[]
+  categories: {
+    book_id: string
+    categoryId: string
+  }[]
+}
+
 interface IInfiniteScrollProps {
   totalItems: number
-  initialItems: IReviewItemProps[] | undefined
+  initialItems: IReviewItemProps[] | IBookProps[] | undefined
+  type: 'reviews' | 'books'
+  bookCategory?: string
 }
 
 export function InfiniteScroll({
   totalItems,
   initialItems,
+  type,
+  bookCategory,
 }: IInfiniteScrollProps) {
-  const [items, setItems] = useState<IReviewItemProps[]>(initialItems || [])
+  const [items, setItems] = useState<(IReviewItemProps | IBookProps)[]>(
+    initialItems || [],
+  )
   const [page, setPage] = useState(0)
   const [ref, inView] = useInView()
 
   async function loadMoreItems() {
     const nextPage = page + 1
-    const items = await getReviews(nextPage)
+    const items =
+      type === 'reviews'
+        ? await getReviews(nextPage)
+        : await getBooks(nextPage, bookCategory)
 
     if (items.length) {
       setPage(nextPage)
@@ -61,7 +86,11 @@ export function InfiniteScroll({
     <>
       {items.map((item) => (
         <li key={item.id}>
-          <ReviewItem {...item} />
+          {type === 'reviews' ? (
+            <ReviewItem {...(item as IReviewItemProps)} />
+          ) : (
+            <BookItem {...(item as IBookProps)} />
+          )}
         </li>
       ))}
 

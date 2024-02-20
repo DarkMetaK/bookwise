@@ -1,79 +1,40 @@
-'use client'
+import { Binoculars } from '@phosphor-icons/react/dist/ssr'
 
-import { useState, useEffect } from 'react'
-import { Binoculars } from '@phosphor-icons/react'
+import { prisma } from '@/libs/prisma'
 
-import { SearchInput } from '@/components/search-input'
-import { Tag } from './components/tag'
-import { Skeleton } from '@/components/skeleton'
-import { BookItem } from '@/components/book-item'
-import { Spinner } from '@/components/spinner'
+// import { SearchInput } from '@/components/search-input'
+import { CategorySelector } from './components/category-selector'
+import { InfiniteScroll } from '@/components/infinite-scroll'
+import { getBooks } from '@/utils/getBooks'
 
-interface IBookProps {
-  id: string
-  name: string
-  author: string
-  cover_url: string
-  ratings: {
-    rate: number
-  }[]
-  categories: {
-    book_id: string
-    categoryId: string
-  }[]
-}
+export default async function Discover({
+  _,
+  searchParams,
+}: {
+  _: any
+  searchParams: { category: string | undefined }
+}) {
+  const totalBooks = await prisma.book.count({
+    where: searchParams.category
+      ? {
+          categories: {
+            some: {
+              category: {
+                name: searchParams.category,
+              },
+            },
+          },
+        }
+      : {},
+  })
+  const initialBooks = await getBooks(0, searchParams.category)
 
-interface ICategoriesProps {
-  id: string
-  name: string
-}
-
-export default function Discover() {
-  const [books, setBooks] = useState<IBookProps[]>([])
-  const [categories, setCategories] = useState<ICategoriesProps[]>([])
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [categoriesIsLoading, setCategoriesIsLoading] = useState(true)
-  const [booksIsLoading, setBooksIsLoading] = useState(true)
-
-  useEffect(() => {
-    async function fetchBooks() {
-      try {
-        const response = await fetch(
-          `api/books${selectedCategory ? `?category=${selectedCategory}` : ''}`,
-        )
-        const json = await response.json()
-        setBooks(json)
-      } catch (error) {
-        console.error(error)
-      } finally {
-        setBooksIsLoading(false)
-      }
-    }
-    fetchBooks()
-  }, [selectedCategory])
-
-  useEffect(() => {
-    async function fetchCategories() {
-      try {
-        const response = await fetch('api/categories')
-        const json = await response.json()
-        setCategories(json)
-      } catch (error) {
-        console.error(error)
-      } finally {
-        setCategoriesIsLoading(false)
-      }
-    }
-    fetchCategories()
-  }, [])
-
-  async function handleSearchBookOrAuthor(text: string) {
-    console.log(text)
-  }
-
-  function handleChangeActiveCategory(value: string | null) {
-    setSelectedCategory(value)
-  }
+  const availableCategories = await prisma.category.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
+  })
 
   return (
     <main className="mr-24 h-[calc(100vh-2.5rem)] flex-1 overflow-hidden pt-12 max-xl:mr-12 max-md:mr-0 max-md:pt-[5.25rem]">
@@ -86,45 +47,29 @@ export default function Discover() {
         </div>
 
         <div className="w-full max-w-[26.5rem] max-md:max-w-none">
-          <SearchInput
-            handleSubmit={handleSearchBookOrAuthor}
+          {/* <SearchInput
+            handleSubmit={() => {}}
             placeholder="Buscar livro ou autor"
-          />
+          /> */}
         </div>
       </header>
 
       <section className="h-[calc(100%-5.5rem)]">
         <div className="mb-12 flex flex-wrap items-center justify-start gap-3">
-          {categoriesIsLoading ? (
-            <Skeleton amount={10} className="h-8 max-w-24" />
-          ) : (
-            <>
-              <Tag
-                selected={!selectedCategory}
-                onClick={() => handleChangeActiveCategory(null)}
-              >
-                Tudo
-              </Tag>
-              {categories.map((category) => (
-                <Tag
-                  key={category.id}
-                  selected={selectedCategory === category.id}
-                  onClick={() => handleChangeActiveCategory(category.id)}
-                >
-                  {category.name}
-                </Tag>
-              ))}
-            </>
-          )}
+          <CategorySelector categories={availableCategories} />
         </div>
 
-        <div className=" grid h-[calc(100%-8.25rem)] grid-cols-3 items-start gap-5 overflow-y-scroll pr-5 max-lg:grid-cols-2 max-md:pr-0 max-sm:grid-cols-1">
-          {booksIsLoading ? (
-            <Skeleton amount={9} className="h-40 min-w-full rounded-lg" />
-          ) : (
-            books.map((book) => <BookItem key={book.id} {...book} />)
-          )}
-        </div>
+        <ul
+          key={Math.random()}
+          className=" grid h-[calc(100%-8.25rem)] grid-cols-3 items-start gap-5 overflow-y-scroll pr-5 max-lg:grid-cols-2 max-md:pr-0 max-sm:grid-cols-1"
+        >
+          <InfiniteScroll
+            totalItems={totalBooks}
+            initialItems={initialBooks}
+            type="books"
+            bookCategory={searchParams.category}
+          />
+        </ul>
       </section>
     </main>
   )
