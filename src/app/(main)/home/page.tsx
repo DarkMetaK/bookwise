@@ -42,7 +42,11 @@ export default async function Home() {
             Avaliações mais recentes
           </h2>
           <ul className="flex flex-col gap-3">
-            <InfiniteScroll totalItems={totalReviews} initialItems={reviews} />
+            <InfiniteScroll
+              totalItems={totalReviews}
+              initialItems={reviews}
+              type="reviews"
+            />
           </ul>
         </section>
 
