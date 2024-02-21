@@ -1,26 +1,31 @@
 'use client'
 
 import { useState, InputHTMLAttributes, ReactNode, FormEvent } from 'react'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { MagnifyingGlass } from '@phosphor-icons/react/dist/ssr'
 
 interface ISearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: ReactNode
-  handleSubmit: (text: string) => Promise<void>
 }
 
-export function SearchInput({
-  icon,
-  handleSubmit,
-  ...props
-}: ISearchInputProps) {
+export function SearchInput({ icon, ...props }: ISearchInputProps) {
   const [text, setText] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
+  const pathname = usePathname()
+  const params = useSearchParams()
 
   async function handleSubmitInput(e: FormEvent<HTMLFormElement>) {
-    setIsLoading(true)
     e.preventDefault()
-    await handleSubmit(text)
-    setIsLoading(false)
+
+    const currentParams = new URLSearchParams(Array.from(params.entries()))
+
+    if (!text) {
+      currentParams.delete('search')
+    } else {
+      currentParams.set('search', text)
+    }
+
+    router.push(`${pathname}?${currentParams.toString()}`)
   }
 
   return (
@@ -36,7 +41,6 @@ export function SearchInput({
         {...props}
       />
       <button
-        disabled={isLoading}
         type="submit"
         className="flex items-center px-5 py-3 leading-none text-gray-500 focus:text-blue-200 focus:outline-none peer-focus:text-blue-200"
       >
