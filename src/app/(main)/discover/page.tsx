@@ -2,7 +2,7 @@ import { Binoculars } from '@phosphor-icons/react/dist/ssr'
 
 import { prisma } from '@/libs/prisma'
 
-// import { SearchInput } from '@/components/search-input'
+import { SearchInput } from '@/components/search-input'
 import { CategorySelector } from './components/category-selector'
 import { InfiniteScroll } from '@/components/infinite-scroll'
 import { getBooks } from '@/utils/getBooks'
@@ -12,22 +12,34 @@ export default async function Discover({
   searchParams,
 }: {
   _: any
-  searchParams: { category: string | undefined }
+  searchParams: { category: string | undefined; search: string | undefined }
 }) {
   const totalBooks = await prisma.book.count({
-    where: searchParams.category
-      ? {
-          categories: {
-            some: {
-              category: {
-                name: searchParams.category,
-              },
-            },
+    where: {
+      categories: {
+        some: {
+          category: {
+            name: searchParams.category,
           },
-        }
-      : {},
+        },
+      },
+      AND: {
+        OR: [
+          {
+            name: { contains: searchParams.search },
+          },
+          {
+            author: { contains: searchParams.search },
+          },
+        ],
+      },
+    },
   })
-  const initialBooks = await getBooks(0, searchParams.category)
+  const initialBooks = await getBooks(
+    0,
+    searchParams.category,
+    searchParams.search,
+  )
 
   const availableCategories = await prisma.category.findMany({
     select: {
@@ -47,10 +59,7 @@ export default async function Discover({
         </div>
 
         <div className="w-full max-w-[26.5rem] max-md:max-w-none">
-          {/* <SearchInput
-            handleSubmit={() => {}}
-            placeholder="Buscar livro ou autor"
-          /> */}
+          <SearchInput placeholder="Buscar livro ou autor" />
         </div>
       </header>
 
@@ -61,7 +70,7 @@ export default async function Discover({
 
         <ul
           key={Math.random()}
-          className=" grid h-[calc(100%-8.25rem)] grid-cols-3 items-start gap-5 overflow-y-scroll pr-5 max-lg:grid-cols-2 max-md:pr-0 max-sm:grid-cols-1"
+          className="grid h-[calc(100%-8.25rem)] grid-cols-3 items-start gap-5 overflow-y-scroll pr-5 max-lg:grid-cols-2 max-md:overflow-y-hidden max-md:pr-0 max-sm:grid-cols-1"
         >
           <InfiniteScroll
             totalItems={totalBooks}
@@ -69,6 +78,34 @@ export default async function Discover({
             type="books"
             bookCategory={searchParams.category}
           />
+
+          {totalBooks === 0 && (
+            <p className="col-span-full flex w-full justify-center text-sm leading-relaxed text-gray-300">
+              Não foi encontrado nenhum livro{' '}
+              {searchParams.category ? (
+                <>
+                  da categoria &apos;
+                  <span className="font-bold text-blue-100">
+                    {searchParams.category}
+                  </span>
+                  &apos;
+                </>
+              ) : (
+                ''
+              )}{' '}
+              {searchParams.search ? (
+                <>
+                  com o termo &apos;
+                  <span className="font-bold text-blue-100">
+                    {searchParams.search}
+                  </span>
+                  &apos;
+                </>
+              ) : (
+                ''
+              )}
+            </p>
+          )}
         </ul>
       </section>
     </main>

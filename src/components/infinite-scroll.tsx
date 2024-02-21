@@ -95,7 +95,7 @@ export function InfiniteScroll({
       ))}
 
       {items.length < totalItems && (
-        <div ref={ref} className="flex w-full justify-center">
+        <div ref={ref} className="col-span-full flex w-full justify-center">
           <FadeLoader color="#fff" />
         </div>
       )}
