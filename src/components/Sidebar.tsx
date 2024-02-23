@@ -9,7 +9,7 @@ import { NavLink } from '@/components/nav-link'
 import { LogoutButton } from '@/components/logout-button'
 
 export async function Sidebar() {
-  const isAuthenticated = await getServerSession(authOptions)
+  const session = await getServerSession(authOptions)
 
   return (
     <aside className="flex h-[calc(100vh-2.5rem)] min-w-60 flex-col gap-16 rounded-xl bg-sidebar bg-center bg-no-repeat px-12 pb-6 pt-10 max-md:hidden">
@@ -26,8 +26,8 @@ export async function Sidebar() {
           <Binoculars size={24} /> Explorar
         </NavLink>
 
-        {isAuthenticated && (
-          <NavLink href="/profile">
+        {session && (
+          <NavLink href={`/profile/${session.user.id}`}>
             <User size={24} />
             Perfil
           </NavLink>

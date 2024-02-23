@@ -9,7 +9,7 @@ import { NavLink } from '@/components/nav-link'
 import { DropdownMenu } from '@/components/dropdown-menu'
 
 export async function Header() {
-  const isAuthenticated = await getServerSession(authOptions)
+  const session = await getServerSession(authOptions)
 
   return (
     <header className="fixed left-0 top-0 hidden h-16 w-full max-w-full items-center justify-between gap-4 border-b border-gray-600 bg-gray-700 px-5 max-md:flex">
@@ -18,14 +18,14 @@ export async function Header() {
       </div>
 
       <nav className="flex items-center gap-10">
-        {!isAuthenticated && (
+        {!session && (
           <NavLink href="/login">
             <SignIn size={24} />
             Login
           </NavLink>
         )}
 
-        <DropdownMenu isAuthenticated={!!isAuthenticated} />
+        <DropdownMenu session={session} />
       </nav>
     </header>
   )

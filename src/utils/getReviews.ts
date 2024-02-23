@@ -2,10 +2,16 @@
 
 import { prisma } from '@/libs/prisma'
 
-export async function getReviews(page = 0) {
+export async function getReviews(
+  page = 0,
+  userId: string | undefined = undefined,
+) {
   const reviews = await prisma.rating.findMany({
     skip: page * 5,
     take: 5,
+    where: {
+      user_id: userId,
+    },
     include: {
       user: {
         select: {
