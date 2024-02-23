@@ -1,16 +1,13 @@
 'use client'
 
+import { Session } from 'next-auth'
 import * as RadixDropdownMenu from '@radix-ui/react-dropdown-menu'
 import { List, ChartLineUp, Binoculars, User } from '@phosphor-icons/react'
 
 import { NavLink } from '@/components/nav-link'
 import { LogoutButton } from './logout-button'
 
-export function DropdownMenu({
-  isAuthenticated,
-}: {
-  isAuthenticated: boolean
-}) {
+export function DropdownMenu({ session }: { session: Session | null }) {
   function handleCloseDropdown() {
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
   }
@@ -39,10 +36,13 @@ export function DropdownMenu({
             </NavLink>
           </RadixDropdownMenu.Item>
 
-          {isAuthenticated && (
+          {session && (
             <>
               <RadixDropdownMenu.Item>
-                <NavLink href="/profile" onClick={handleCloseDropdown}>
+                <NavLink
+                  href={`/profile/${session.user.id}`}
+                  onClick={handleCloseDropdown}
+                >
                   <User size={24} />
                   Perfil
                 </NavLink>
