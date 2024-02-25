@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import Image from 'next/image'
 import {
   User,
   BookOpen,
@@ -10,7 +12,26 @@ import { prisma } from '@/libs/prisma'
 
 import { InfiniteScroll } from '@/components/infinite-scroll'
 import { SearchInput } from '@/components/search-input'
-import Image from 'next/image'
+
+interface IReviewItemProps {
+  id: string
+  rate: number
+  description: string
+  created_at: Date
+  book_id: string
+  user_id: string
+  user: {
+    id: string
+    image: string | null
+    name: string | null
+  }
+  book: {
+    id: string
+    name: string
+    cover_url: string
+    author: string
+  }
+}
 
 export default async function Profile({
   params,
@@ -27,7 +48,15 @@ export default async function Profile({
       Rating: {
         select: {
           id: true,
-          book: true,
+          book: {
+            include: {
+              categories: {
+                include: {
+                  category: true,
+                },
+              },
+            },
+          },
           book_id: true,
           user: true,
           user_id: true,
@@ -40,17 +69,52 @@ export default async function Profile({
   })
 
   const totalReviews = userInfo.Rating.length
-  const totalAmountOfReadPages = userInfo.Rating.reduce(
-    (acc, review) => (acc += review.book.total_pages),
-    0,
-  )
-  const totalAmountOfReviewedBooks = userInfo.Rating.filter(
-    (review, index) => userInfo.Rating.indexOf(review) === index,
-  ).length
 
-  const totalAmountOfReadAuthors = userInfo.Rating.filter(
-    (review, index) => userInfo.Rating.indexOf(review) === index,
-  ).length
+  const {
+    totalAmountOfPages,
+    totalAmountOfBooks,
+    totalAmountOfAuthor,
+    categoriesRanking,
+  } = userInfo.Rating.reduce(
+    (acc, review) => {
+      if (!acc.reviewedBooks.some((item) => item.book_id === review.book_id)) {
+        acc.totalAmountOfPages += review.book.total_pages
+        acc.totalAmountOfBooks += 1
+
+        review.book.categories.forEach(({ category: { name } }) => {
+          acc.categoriesRanking[name] = (acc.categoriesRanking[name] || 0) + 1
+        })
+      }
+
+      if (
+        !acc.reviewedBooks.some(
+          (item) => item.book.author === review.book.author,
+        )
+      ) {
+        acc.totalAmountOfAuthor += 1
+      }
+
+      acc.reviewedBooks.push(review)
+      return acc
+    },
+    {
+      reviewedBooks: [] as IReviewItemProps[],
+      totalAmountOfPages: 0,
+      totalAmountOfBooks: 0,
+      totalAmountOfAuthor: 0,
+      categoriesRanking: {} as any,
+    },
+  )
+
+  const mostReadCategory = Object.entries(categoriesRanking).reduce(
+    (acc: any, [category, amount]: any) => {
+      if (amount > acc.amount) {
+        acc = { category, amount }
+      }
+      return acc
+    },
+    { category: '', amount: 0 } as any,
+  )
 
   return (
     <main className="mr-24 h-[calc(100vh-2.5rem)] flex-1 overflow-hidden pt-12 max-xl:mr-12 max-md:mr-0 max-md:pt-[5.25rem]">
@@ -62,7 +126,7 @@ export default async function Profile({
       </header>
 
       <div className="grid h-[calc(100%-4.5rem)] grid-cols-[minmax(30rem,_1fr)_minmax(auto,20rem)] gap-16 max-xl:grid-cols-1">
-        <section className="overflow-y-scroll pr-5 max-md:overflow-y-hidden max-md:pr-0">
+        <section className="space-y-8 overflow-y-scroll pr-5 max-xl:order-2 max-md:overflow-y-hidden max-md:pr-0">
           <div>
             <SearchInput placeholder="Buscar livro avaliado" />
           </div>
@@ -75,12 +139,12 @@ export default async function Profile({
           </ul>
         </section>
 
-        <section>
+        <section className="max-xl:order-1">
           <header className="flex w-full flex-col items-center gap-5">
             <Image
               width={72}
               height={72}
-              className="w-full max-w-[4.5rem] rounded-full border border-blue-100 object-cover"
+              className="aspect-square w-full max-w-[4.5rem] rounded-full border border-blue-100 object-cover"
               alt=""
               src={userInfo.image || '/images/default-avatar.png'}
             />
@@ -89,12 +153,12 @@ export default async function Profile({
             </h2>
           </header>
 
-          <ul className="mx-auto flex max-w-fit flex-col gap-10 py-5">
+          <ul className="mx-auto grid max-w-fit gap-10 py-5 max-xl:grid-cols-2">
             <li className="flex items-center gap-5 text-blue-100">
               <BookOpen size={32} />
               <div>
                 <strong className="font-bold leading-snug text-gray-200">
-                  {totalAmountOfReadPages}
+                  {totalAmountOfPages}
                 </strong>
                 <p className="leading-relaxed text-gray-300">Páginas lidas</p>
               </div>
@@ -103,7 +167,7 @@ export default async function Profile({
               <Books size={32} />
               <div>
                 <strong className="font-bold leading-snug text-gray-200">
-                  {totalAmountOfReviewedBooks}
+                  {totalAmountOfBooks}
                 </strong>
                 <p className="leading-relaxed text-gray-300">
                   Livros avaliados
@@ -114,7 +178,7 @@ export default async function Profile({
               <UserList size={32} />
               <div>
                 <strong className="font-bold leading-snug text-gray-200">
-                  8
+                  {totalAmountOfAuthor}
                 </strong>
                 <p className="leading-relaxed text-gray-300">Autores lidos</p>
               </div>
@@ -123,7 +187,7 @@ export default async function Profile({
               <BookmarkSimple size={32} />
               <div>
                 <strong className="font-bold leading-snug text-gray-200">
-                  Computação
+                  {mostReadCategory.category}
                 </strong>
                 <p className="leading-relaxed text-gray-300">
                   Categoria mais lida
