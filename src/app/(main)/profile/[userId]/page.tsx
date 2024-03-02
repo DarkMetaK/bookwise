@@ -131,11 +131,17 @@ export default async function Profile({
             <SearchInput placeholder="Buscar livro avaliado" />
           </div>
           <ul className="flex flex-col gap-3">
-            <InfiniteScroll
-              totalItems={totalReviews}
-              initialItems={userInfo.Rating}
-              type="reviews"
-            />
+            {totalReviews > 0 ? (
+              <InfiniteScroll
+                totalItems={totalReviews}
+                initialItems={userInfo.Rating}
+                type="reviews"
+              />
+            ) : (
+              <p className="w-full text-sm leading-relaxed text-gray-300">
+                Nenhuma avaliação encontrada.
+              </p>
+            )}
           </ul>
         </section>
 
