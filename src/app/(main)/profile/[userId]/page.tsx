@@ -145,7 +145,7 @@ export default async function Profile({
           </ul>
         </section>
 
-        <section className="max-xl:order-1">
+        <section className="overflow-y-scroll max-xl:order-1">
           <header className="flex w-full flex-col items-center gap-5">
             <Image
               width={72}
