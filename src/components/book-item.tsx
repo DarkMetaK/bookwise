@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { Star } from '@phosphor-icons/react/dist/ssr'
+import Link from 'next/link'
 
 interface IBookItemProps {
   id: string
@@ -14,11 +15,15 @@ interface IBookItemProps {
 
 export function BookItem({ imageSize = 'md', ...props }: IBookItemProps) {
   const totalStars = Math.round(
-    props.ratings.reduce((acc, item) => (acc += item.rate), 0),
+    props.ratings.reduce((acc, item) => (acc += item.rate), 0) /
+      props.ratings.length,
   )
 
   return (
-    <div className="flex w-full gap-5 rounded-lg bg-gray-700 px-5 py-4">
+    <Link
+      href={`/book/${props.id}`}
+      className="flex w-full gap-5 rounded-lg bg-gray-700 px-5 py-4"
+    >
       <div
         className={` ${imageSize === 'md' ? 'max-w-[6.75rem]' : 'max-w-[4rem]'} flex-1 overflow-hidden rounded-[4px]`}
       >
@@ -45,6 +50,6 @@ export function BookItem({ imageSize = 'md', ...props }: IBookItemProps) {
           ))}
         </div>
       </div>
-    </div>
+    </Link>
   )
 }

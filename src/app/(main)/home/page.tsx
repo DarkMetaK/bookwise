@@ -56,7 +56,7 @@ export default async function Home() {
               Livros populares
             </h2>
             <Link
-              href="/"
+              href="/discover"
               className="flex items-center gap-2 px-2 py-1 text-sm font-bold leading-relaxed text-purple-100 transition-colors hover:text-purple-200"
             >
               Ver todos <CaretRight size={16} />

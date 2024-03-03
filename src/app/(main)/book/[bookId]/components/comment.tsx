@@ -1,9 +1,9 @@
 import Image from 'next/image'
-import { Star } from '@phosphor-icons/react/dist/ssr'
 import { formatDistance } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { Star } from '@phosphor-icons/react/dist/ssr'
 
-interface IReviewItemProps {
+interface ICommentProps {
   id: string
   rate: number
   description: string
@@ -15,19 +15,13 @@ interface IReviewItemProps {
     image: string | null
     name: string | null
   }
-  book: {
-    id: string
-    name: string
-    cover_url: string
-    author: string
-  }
 }
 
-export function ReviewItem(props: IReviewItemProps) {
+export function Comment(props: ICommentProps) {
   const createdDate = new Date(props.created_at)
 
   return (
-    <article className="flex flex-col gap-8 rounded-lg bg-gray-700 p-6">
+    <article className="space-y-5 rounded-lg bg-gray-700 p-6">
       <header className="flex items-start justify-between max-xs:flex-col max-xs:gap-2">
         <div className="flex items-start gap-4">
           <div>
@@ -41,7 +35,9 @@ export function ReviewItem(props: IReviewItemProps) {
           </div>
 
           <div className="flex flex-col">
-            <em className="leading-relaxed text-gray-100">{props.user.name}</em>
+            <strong className="leading-relaxed text-gray-100">
+              {props.user.name}
+            </strong>
             <time
               className="text-sm leading-relaxed text-gray-400"
               title={createdDate.toLocaleDateString('pt-BR', {
@@ -72,30 +68,9 @@ export function ReviewItem(props: IReviewItemProps) {
         </div>
       </header>
 
-      <div className="flex items-start gap-5 max-xs:flex-col max-xs:gap-3">
-        <div className="w-full max-w-[6.75rem] overflow-hidden rounded-[4px]">
-          <Image
-            src={`/${props.book.cover_url}`}
-            alt=""
-            width={108}
-            height={152}
-          />
-        </div>
-
-        <div className="flex flex-1 flex-col gap-5 max-xs:gap-2">
-          <div className="flex flex-col">
-            <strong className="leading-snug text-gray-100">
-              {props.book.name}
-            </strong>
-            <p className="text-sm leading-relaxed text-gray-400">
-              {props.book.author}
-            </p>
-          </div>
-          <p className="text-sm leading-relaxed text-gray-300">
-            {props.description}
-          </p>
-        </div>
-      </div>
+      <p className="text-sm leading-relaxed text-gray-300">
+        {props.description}
+      </p>
     </article>
   )
 }

@@ -36,6 +36,7 @@ const config: Config = {
       },
       screens: {
         md: '860px',
+        xs: '420px',
       },
     },
     backgroundImage: {

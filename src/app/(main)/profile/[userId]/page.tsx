@@ -125,7 +125,7 @@ export default async function Profile({
         </h1>
       </header>
 
-      <div className="grid h-[calc(100%-4.5rem)] grid-cols-[minmax(30rem,_1fr)_minmax(auto,20rem)] gap-16 max-xl:grid-cols-1">
+      <div className="grid h-[calc(100%-4.5rem)] grid-cols-[minmax(30rem,_1fr)_minmax(auto,20rem)] gap-16 max-xl:grid-cols-1 max-xs:gap-5">
         <section className="space-y-8 overflow-y-scroll pr-5 max-xl:order-2 max-md:overflow-y-hidden max-md:pr-0">
           <div>
             <SearchInput placeholder="Buscar livro avaliado" />
