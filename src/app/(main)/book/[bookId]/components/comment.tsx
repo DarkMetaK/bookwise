@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { formatDistance } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Star } from '@phosphor-icons/react/dist/ssr'
@@ -24,7 +25,7 @@ export function Comment(props: ICommentProps) {
     <article className="space-y-5 rounded-lg bg-gray-700 p-6">
       <header className="flex items-start justify-between max-xs:flex-col max-xs:gap-2">
         <div className="flex items-start gap-4">
-          <div>
+          <Link href={`/profile/${props.user_id}`}>
             <Image
               src={props.user.image || ''}
               alt=""
@@ -32,7 +33,7 @@ export function Comment(props: ICommentProps) {
               height={40}
               className="aspect-square w-full rounded-full border border-blue-100 object-cover"
             />
-          </div>
+          </Link>
 
           <div className="flex flex-col">
             <strong className="leading-relaxed text-gray-100">

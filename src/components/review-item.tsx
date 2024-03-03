@@ -1,7 +1,8 @@
 import Image from 'next/image'
-import { Star } from '@phosphor-icons/react/dist/ssr'
+import Link from 'next/link'
 import { formatDistance } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { Star } from '@phosphor-icons/react/dist/ssr'
 
 interface IReviewItemProps {
   id: string
@@ -30,7 +31,7 @@ export function ReviewItem(props: IReviewItemProps) {
     <article className="flex flex-col gap-8 rounded-lg bg-gray-700 p-6">
       <header className="flex items-start justify-between max-xs:flex-col max-xs:gap-2">
         <div className="flex items-start gap-4">
-          <div>
+          <Link href={`/profile/${props.user_id}`}>
             <Image
               src={props.user.image || ''}
               alt=""
@@ -38,7 +39,7 @@ export function ReviewItem(props: IReviewItemProps) {
               height={40}
               className="aspect-square w-full rounded-full border border-blue-100 object-cover"
             />
-          </div>
+          </Link>
 
           <div className="flex flex-col">
             <em className="leading-relaxed text-gray-100">{props.user.name}</em>
@@ -72,7 +73,10 @@ export function ReviewItem(props: IReviewItemProps) {
         </div>
       </header>
 
-      <div className="flex items-start gap-5 max-xs:flex-col max-xs:gap-3">
+      <Link
+        href={`/book/${props.book_id}`}
+        className="flex items-start gap-5 max-xs:flex-col max-xs:gap-3"
+      >
         <div className="w-full max-w-[6.75rem] overflow-hidden rounded-[4px]">
           <Image
             src={`/${props.book.cover_url}`}
@@ -95,7 +99,7 @@ export function ReviewItem(props: IReviewItemProps) {
             {props.description}
           </p>
         </div>
-      </div>
+      </Link>
     </article>
   )
 }
