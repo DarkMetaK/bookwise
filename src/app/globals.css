@@ -6,6 +6,11 @@
   box-sizing: border-box;
 }
 
+:focus {
+  outline: none;
+  box-shadow: 0 0 4px #50B2C0;
+}
+
 body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;

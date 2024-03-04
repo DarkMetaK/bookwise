@@ -40,6 +40,7 @@ export default async function Book({ params }: { params: { bookId: string } }) {
         {...bookData}
         categories={bookData.categories.map((category) => category.category)}
       />
+
       <CommentForm reviews={[...bookData.ratings]} />
     </main>
   )
