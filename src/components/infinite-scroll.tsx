@@ -48,6 +48,7 @@ interface IInfiniteScrollProps {
   totalItems: number
   initialItems: IReviewItemProps[] | IBookProps[] | undefined
   type: 'reviews' | 'books'
+  userId?: string
   bookCategory?: string
 }
 
@@ -55,6 +56,7 @@ export function InfiniteScroll({
   totalItems,
   initialItems,
   type,
+  userId,
   bookCategory,
 }: IInfiniteScrollProps) {
   const [items, setItems] = useState<(IReviewItemProps | IBookProps)[]>(
@@ -67,7 +69,7 @@ export function InfiniteScroll({
     const nextPage = page + 1
     const items =
       type === 'reviews'
-        ? await getReviews(nextPage)
+        ? await getReviews(nextPage, userId)
         : await getBooks(nextPage, bookCategory)
 
     if (items.length) {

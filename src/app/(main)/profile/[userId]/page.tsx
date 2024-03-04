@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import {
   User,
@@ -35,10 +36,12 @@ interface IReviewItemProps {
 
 export default async function Profile({
   params,
+  searchParams,
 }: {
   params: { userId: string }
+  searchParams: { search: string | undefined }
 }) {
-  const userInfo = await prisma.user.findUniqueOrThrow({
+  const userInfo = await prisma.user.findUnique({
     where: {
       id: params.userId,
     },
@@ -46,6 +49,17 @@ export default async function Profile({
       image: true,
       name: true,
       Rating: {
+        where:
+          searchParams.search !== undefined
+            ? {
+                book: {
+                  OR: [
+                    { author: { contains: searchParams.search } },
+                    { name: { contains: searchParams.search } },
+                  ],
+                },
+              }
+            : {},
         select: {
           id: true,
           book: {
@@ -67,6 +81,10 @@ export default async function Profile({
       },
     },
   })
+
+  if (userInfo === null) {
+    notFound()
+  }
 
   const totalReviews = userInfo.Rating.length
 
@@ -130,7 +148,7 @@ export default async function Profile({
           <div>
             <SearchInput placeholder="Buscar livro avaliado" />
           </div>
-          <ul className="flex flex-col gap-3">
+          <ul key={Math.random()} className="flex flex-col gap-3">
             {totalReviews > 0 ? (
               <InfiniteScroll
                 totalItems={totalReviews}
