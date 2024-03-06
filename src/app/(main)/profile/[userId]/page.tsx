@@ -60,6 +60,9 @@ export default async function Profile({
                 },
               }
             : {},
+        orderBy: {
+          created_at: 'desc',
+        },
         select: {
           id: true,
           book: {

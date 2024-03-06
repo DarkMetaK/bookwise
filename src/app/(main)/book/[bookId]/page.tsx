@@ -12,6 +12,9 @@ export default async function Book({ params }: { params: { bookId: string } }) {
     },
     include: {
       ratings: {
+        orderBy: {
+          created_at: 'desc',
+        },
         include: {
           user: {
             select: {
@@ -41,7 +44,7 @@ export default async function Book({ params }: { params: { bookId: string } }) {
         categories={bookData.categories.map((category) => category.category)}
       />
 
-      <CommentForm reviews={[...bookData.ratings]} />
+      <CommentForm reviews={[...bookData.ratings]} bookId={bookData.id} />
     </main>
   )
 }

@@ -12,6 +12,9 @@ export async function getReviews(
     where: {
       user_id: userId,
     },
+    orderBy: {
+      created_at: 'desc',
+    },
     include: {
       user: {
         select: {
