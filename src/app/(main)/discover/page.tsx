@@ -8,10 +8,8 @@ import { InfiniteScroll } from '@/components/infinite-scroll'
 import { getBooks } from '@/utils/getBooks'
 
 export default async function Discover({
-  _,
   searchParams,
 }: {
-  _: any
   searchParams: { category: string | undefined; search: string | undefined }
 }) {
   const totalBooks = await prisma.book.count({
