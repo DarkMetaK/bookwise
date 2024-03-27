@@ -40,7 +40,7 @@ interface IBookProps {
   }[]
   categories: {
     book_id: string
-    categoryId: string
+    category_id: string
   }[]
 }
 
