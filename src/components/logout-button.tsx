@@ -2,6 +2,7 @@
 
 import { ButtonHTMLAttributes } from 'react'
 import Image from 'next/image'
+import Link, { LinkProps } from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { SignIn, SignOut } from '@phosphor-icons/react'
 
@@ -11,12 +12,13 @@ export function LogoutButton(props: ButtonHTMLAttributes<HTMLButtonElement>) {
 
   if (!isAuthenticated) {
     return (
-      <button
+      <Link
         {...props}
+        href="/"
         className="mt-auto flex w-full max-w-36 items-center justify-center gap-3 py-2 font-bold leading-relaxed text-gray-200 transition-colors hover:text-gray-100"
       >
         Fazer login <SignIn size={20} className="text-blue-100" />
-      </button>
+      </Link>
     )
   }
 
