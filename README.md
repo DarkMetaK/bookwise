@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<a name="readme-top"></a>
 
-## Getting Started
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
 
-First, run the development server:
+  <a href="https://github.com/DarkMetaK/bookwise">
+    <img src="./src/assets/logo.svg" alt="Logo" width="160" height="80">
+  </a>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+  <h3 align="center">Bookwise</h3>
+
+  <p align="center">
+    Plataforma de review de livros, com sistema de autenticação OAuth
+  </p>
+</div>
+
+
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Sumário</summary>
+  <ol>
+    <li>
+      <a href="#sobre">Sobre</a>
+      <ul>
+        <li><a href="#tecnologias">Tecnologias</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#como-rodar-o-projeto">Como rodar o projeto</a>
+    </li>
+    <li><a href="#contato">Contato</a></li>
+    <li><a href="#agradecimentos">Agradecimentos</a></li>
+  </ol>
+</details>
+
+
+
+<!-- ABOUT THE PROJECT -->
+## Sobre
+
+<a href="darkmetak-bookwise.vercel.app/">
+    <img src="./public/preview.png" alt="Product Name Screen Shot" width=100%>
+</a>
+
+O projeto é um website para compartilhamento de reviews de livros, sendo possível realizar login por meio de plataformas como Google e Github. Toda sua estrutura foi desenvolvida com Next.js utilizando App Router, como forma de solidificar o conhecimento no framework e em outras tecnologias como Prisma. Além de postar reviews, o usuário consegue visualizar outros perfis e explorar o católogo de livros por meio de filtros.
+
+### Tecnologias
+
+[![Next][Next.js]][Next-url]<br>
+[![TypeScript][TypeScript.js]][TypeScript-url]<br>
+[![Prisma][Prisma]][Prisma-url]<br>
+
+<p align="right">(<a href="#readme-top">Retornar ao topo</a>)</p>
+
+<!-- GETTING STARTED -->
+## Como rodar o projeto
+
+É possível acessar a plataforma acessando o link: https://darkmetak-timer.netlify.app/
+
+1 - Clone o repositório
+```sh
+git clone https://github.com/DarkMetaK/bookwise.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2 - Configure as variáveis de ambiente
+```sh
+# NEXT
+NEXTAUTH_SECRET='SOME_SECRET'
+NEXTAUTH_URL=http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# GOOGLE OAUTH
+GOOGLE_CLIENT_ID='GOOGLE_APP_CLIENT_ID'
+GOOGLE_CLIENT_SECRET='GOOGLE_APP_CLIENT_SECRET'
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+# GITHUB OAUTH
+GITHUB_CLIENT_ID='GITHUB_APP_CLIENT_ID'
+GITHUB_CLIENT_SECRET='GITHUB_APP_CLIENT_SECRET'
 
-## Learn More
+# PRISMA
+DATABASE_URL='./dev.db'
+```
 
-To learn more about Next.js, take a look at the following resources:
+3 - Inicialize e popule o prisma
+```sh
+npx prisma migrate dev --name init
+```
+```sh
+npx prisma db seed
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4 - Rode o projeto
+```sh
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+<p align="right">(<a href="#readme-top">Retornar ao topo</a>)</p>
 
-## Deploy on Vercel
+<!-- CONTACT -->
+## Contato
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Matheus Porto - [LinkedIn](https://www.linkedin.com/in/matheusport0/) - matporto03@gmail.com
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Link Repositório: [https://github.com/DarkMetaK/bookwise](https://github.com/DarkMetaK/bookwise)
+
+<p align="right">(<a href="#readme-top">Retornar ao topo</a>)</p>
+
+<!-- ACKNOWLEDGMENTS -->
+## Agradecimentos
+
+* [Best-README-Template](https://github.com/othneildrew/Best-README-Template)
+* [Img Shields](https://shields.io)
+* [Next Auth](https://next-auth.js.org/)
+
+<p align="right">(<a href="#readme-top">Retornar ao topo</a>)</p>
+
+<!-- MARKDOWN LINKS & IMAGES -->
+[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
+[Next-url]: https://nextjs.org/
+[TypeScript.js]: https://shields.io/badge/TypeScript-3178C6?logo=TypeScript&logoColor=FFF&style=for-the-badge
+[TypeScript-url]: https://www.typescriptlang.org/
+[Prisma]: https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white
+[Prisma-url]: https://www.prisma.io/
