@@ -40,7 +40,7 @@
 <!-- ABOUT THE PROJECT -->
 ## Sobre
 
-<a href="darkmetak-bookwise.vercel.app/">
+<a href="https://darkmetak-bookwise.vercel.app/">
     <img src="./public/preview.png" alt="Product Name Screen Shot" width=100%>
 </a>
 
